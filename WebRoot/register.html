@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, 
+        initial-scale=1, maximum-scale=1, user-scalable=no">
+		<title></title>
+		<link href="css/reset.css" type="text/css"  rel="stylesheet"/>
+		<link href="css/style.css" type="text/css"  rel="stylesheet"/>
+		<style type="text/css">
+			.count form input:first-child{
+				border-radius: 3px 3px 0 0;
+			}
+			.count form input:nth-child(2){
+				border-radius: 0 0 0px 0px;
+			}
+			.count form input:nth-child(3){
+				border-radius: 0 0 3px 3px;
+				margin-top: 0px;
+				background: white;
+			}
+			.count form input:nth-child(4){
+				margin-top: 20px;
+				background: #4876FF;
+				color: white;
+				border-radius: 3px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="wrapper">
+			<header><img src="images/1a.png" /></header>
+			<article class="count">
+				<form action="RegisterServlet" method="post">
+					<input type="text" name="exampleInputEmail1" placeholder="请输入邮箱账号" />
+					<input type="password" name="exampleInputPassword1" placeholder="请输入密码" />
+					<input type="password" name="exampleInputPassword2" placeholder="请确认密码" />
+					<input type="submit"  value="立即注册"/>
+				</form>
+			</article>
+			<footer>
+				<ul>
+					<li><a href="#"><img src="images/2.png"/></a></li>
+					<li><a href="#"><img src="images/3.png"/></a></li>
+					<li><a href="#"><img src="images/4.png"/></a></li>
+				</ul>
+			</footer>
+		</div>
+	</body>
+</html>

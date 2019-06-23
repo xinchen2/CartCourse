@@ -1,8 +1,12 @@
 package entity;
 
-//商品类
-public class Items {
+import java.io.Serializable;
+import java.util.Map;
 
+//商品类
+public class Items implements Serializable{
+	private static final long serialVersionUID = 1L;
+	
 	private int id; // 商品编号
 	private String name; // 商品名称
 	private String city; // 产地
@@ -25,6 +29,14 @@ public class Items {
 		this.price = price;
 		this.number = number;
 		
+	}
+	
+	public Items(Map<String, Object> map){
+		this.id = (int)map.get("id");
+		this.name = (String)map.get("name");
+		this.city = (String)map.get("city");
+		this.picture = (String)map.get("picture");
+		this.number = (int)map.get("number");
 	}
 	public int getId() {
 		return id;

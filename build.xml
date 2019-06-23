@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project basedir="." default="publish" name="Cart2">  
+    <target name="init" description="设置初始化打 war 包需要的路径变量">  
+        <property name="name" value="Cart2"/>  
+        <property name="src" value="${basedir}/Cart2/src"/>  
+        <property name="lib" value="${basedir}/Cart2/WebRoot/WEB-INF/lib"/>  
+        <property name="webapp" value="${basedir}/Cart2/WebRoot"/>  
+        <property name="cofig" value="${basedir}/Cart2/resource/"/>  
+          
+        <property name="build.src" value="${basedir}/temp/Cart2/src"/>  
+        <property name="build.dest" value="${basedir}/temp/Cart2/WEB-INF/classes"/>  
+        <property name="buildwar.dest" value="${basedir}/temp/Cart2"/>  
+        <property name="build.javadocs" value="${basedir}/temp/doc"/>  
+        <property name="jar.dest" value="${basedir}/temp/jar"/>  
+        <property name="war.dest" value="${basedir}/temp/war"/>  
+        <property name="j2ee.lib" value="${basedir}/j2eejar/"/>        
+  
+        <property name="toCart2at.home" value="/opt/nCart2/NCart2/toCart2at"/>  
+          
+        <path id="classpath">  
+            <fileset dir="${lib}">  
+                <include name="**/*.jar"/>  
+            </fileset>
+            <fileset dir="${j2ee.lib}">
+                <include name="**/*.jar"/>
+            </fileset>  
+        </path>  
+    </target>  
+      
+    <target name="prepare" depends="init" description="创建打包需要的路径，拷贝源文件到打包路径下">  
+        <mkdir dir="${build.src}"/>  
+        <mkdir dir="${build.dest}"/>  
+        <mkdir dir="${buildwar.dest}"/>  
+        <mkdir dir="${jar.dest}"/>  
+        <mkdir dir="${war.dest}"/>  
+        <copy todir="${build.src}">  
+            <fileset dir="${src}"/>  
+        </copy>  
+        <copy todir="${buildwar.dest}">  
+            <fileset dir="${webapp}"/>  
+        </copy>  
+        <copy todir="${build.dest}">
+            <fileset dir="${cofig}"/>
+        </copy>
+    </target>  
+      
+    <target name="build" depends="prepare" description="编译 java 文件，拷贝 properties 属性配置文件到编译后的路径下">  
+        <javac srcdir="${build.src}" destdir="${build.dest}" includeantruntime="false">  
+            <classpath refid="classpath"/>  
+        </javac>  
+    </target>  
+      
+    <target name="antwar" depends="cpmapper" description="打 war 包，不将 java 文件打入包内">  
+        <delete dir="${build.src}"/>
+        <war warfile="${war.dest}/Cart2.war" webxml="${buildwar.dest}/WEB-INF/web.xml">  
+            <lib dir="${buildwar.dest}/WEB-INF/lib"/>  
+            <classes dir="${build.dest}"/>  
+            <fileset dir="${buildwar.dest}"/>  
+        </war>  
+    </target>  
+     
+    <target name="cpmapper" depends="build" description="将mapper对应的xml文件拷入相应classes的mapper类目录">  
+        <copy todir="${build.dest}/com/cstor/network/account/mapper">  
+            <fileset dir="${src}/com/cstor/network/account/mapper">
+		     <include name="*.xml"/>
+	    </fileset>  
+        </copy>  
+        <copy todir="${build.dest}/com/cstor/network/alarm/mapper">  
+            <fileset dir="${src}/com/cstor/network/alarm/mapper">
+		     <include name="*.xml"/>
+	</fileset>  
+        </copy>
+	<copy todir="${build.dest}/com/cstor/network/cloudspace/mapper">  
+            <fileset dir="${src}/com/cstor/network/cloudspace/mapper">
+		     <include name="*.xml"/>
+            </fileset>  
+        </copy>
+	<copy todir="${build.dest}/com/cstor/network/device/mapper">  
+            <fileset dir="${src}/com/cstor/network/device/mapper">
+		     <include name="*.xml"/>
+	    </fileset>  
+        </copy>
+	<copy todir="${build.dest}/com/cstor/network/fault/mapper">  
+            <fileset dir="${src}/com/cstor/network/fault/mapper">
+		     <include name="*.xml"/>
+	    </fileset>  
+        </copy>
+	<copy todir="${build.dest}/com/cstor/network/logger/mapper">  
+            <fileset dir="${src}/com/cstor/network/logger/mapper">
+		    <include name="*.xml"/>
+	   </fileset>  
+        </copy>
+	<copy todir="${build.dest}/com/cstor/network/login/mapper">  
+            <fileset dir="${src}/com/cstor/network/login/mapper">
+		     <include name="*.xml"/>
+	    </fileset>  
+        </copy>
+    </target>  
+
+ 
+    <target name="publish" depends="antwar,clean" description="发布 war 包至 toCart2at 目录下">  
+        <copy todir="${toCart2at.home}/webapps">  
+            <fileset dir="${war.dest}">  
+                <include name="**/*.war"/>  
+            </fileset>  
+        </copy>  
+    </target>  
+      
+      
+    <target name="clean" depends="init" description="清除打包用临时文件">  
+        <delete dir="${build.src}"/>  
+        <delete>  
+            <fileset dir="${build.dest}" includes="**/*.classes"/>  
+        </delete>  
+        <delete dir="${buildwar.dest}"/>  
+    </target>  
+</project>  

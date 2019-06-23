@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 import util.DBHelper;
-
+import util.JdbcUtil;
 import entity.Items;
 
 //商品的业务逻辑类
@@ -19,8 +19,8 @@ public class ItemsDAO {
 		ResultSet rs = null;
 		ArrayList<Items> list = new ArrayList<Items>(); // 商品集合
 		try {
-			conn = DBHelper.getConnection();
-			String sql = "select * from cart.items;"; // SQL语句
+			conn = JdbcUtil.getConnection();
+			String sql = "select * from cart.ITEMS;"; // SQL语句
 			stmt = conn.prepareStatement(sql);
 			rs = stmt.executeQuery();
 			while (rs.next()) {
@@ -38,27 +38,69 @@ public class ItemsDAO {
 			ex.printStackTrace();
 			return null;
 		} finally {
-			// 释放数据集对象
-			if (rs != null) {
-				try {
-					rs.close();
-					rs = null;
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
-			}
-			// 释放语句对象
-			if (stmt != null) {
-				try {
-					stmt.close();
-					stmt = null;
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
-			}
+			JdbcUtil.release(conn, stmt, rs);
 		}
 
 	}
+	
+	
+	// 获得所有的商品信息
+		public int getItemsCount() {
+			Connection conn = null;
+			PreparedStatement stmt = null;
+			ResultSet rs = null;
+			try {
+				conn = JdbcUtil.getConnection();
+				String sql = "select count(*) from cart.ITEMS;"; // SQL语句
+				stmt = conn.prepareStatement(sql);
+				rs = stmt.executeQuery();
+				if (rs.next()) {
+					return rs.getInt(1); 
+				}else {
+					return 0;
+				}
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				return 0;
+			} finally {
+				JdbcUtil.release(conn, stmt, rs);
+			}
+
+		}
+	
+	
+	// 分页获取商品信息
+		public ArrayList<Items> getSplitItems(int fromIndex,int size) {
+			Connection conn = null;
+			PreparedStatement stmt = null;
+			ResultSet rs = null;
+			ArrayList<Items> list = new ArrayList<Items>(); // 商品集合
+			try {
+				conn = JdbcUtil.getConnection();
+				String sql = "select * from cart.ITEMS limit ?,?;"; // SQL语句
+				stmt = conn.prepareStatement(sql);
+				stmt.setInt(1, fromIndex);
+				stmt.setInt(2, size);
+				rs = stmt.executeQuery();
+				while (rs.next()) {
+					Items item = new Items();
+					item.setId(rs.getInt("id"));
+					item.setName(rs.getString("name"));
+					item.setCity(rs.getString("city"));
+					item.setNumber(rs.getInt("number"));
+					item.setPrice(rs.getInt("price"));
+					item.setPicture(rs.getString("picture"));
+					list.add(item);// 把一个商品加入集合
+				}
+				return list; // 返回集合。
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				return null;
+			} finally {
+				JdbcUtil.release(conn, stmt, rs);
+			}
+
+		}
 
 	// 根据商品编号获得商品资料
 	public Items getItemsById(int id) {
@@ -66,8 +108,8 @@ public class ItemsDAO {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			conn = DBHelper.getConnection();
-			String sql = "select * from items where id=?;"; // SQL语句
+			conn = JdbcUtil.getConnection();
+			String sql = "select * from cart.ITEMS where id=?;"; // SQL语句
 			stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, id);
 			rs = stmt.executeQuery();
@@ -88,25 +130,7 @@ public class ItemsDAO {
 			ex.printStackTrace();
 			return null;
 		} finally {
-			// 释放数据集对象
-			if (rs != null) {
-				try {
-					rs.close();
-					rs = null;
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
-			}
-			// 释放语句对象
-			if (stmt != null) {
-				try {
-					stmt.close();
-					stmt = null;
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
-			}
-
+			JdbcUtil.release(conn, stmt, rs);
 		}
 	}
 	//获取最近浏览的前3条商品信息
@@ -131,4 +155,10 @@ public class ItemsDAO {
 		
 	}
 
+	public static void main(String[] args) {
+		ItemsDAO dao = new ItemsDAO();
+		System.out.println(dao.getItemsCount());
+		System.out.println(dao.getSplitItems(2, 10));
+	}
+	
 }
