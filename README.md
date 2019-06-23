@@ -27,5 +27,5 @@
 
 [文件上传界面http://47.106.199.67:8080/CartCourse/upload.jsp](http://47.106.199.67:8080/CartCourse/upload.jsp)    
 
-文件成功上传后，可以在tomcat服务器的对应项目CartCourse下的WEB-INF文件夹下看到上传的文件
+文件成功上传后，可以在tomcat服务器的对应项目CartCourse下的WEB-INF文件夹下看到上传的文件(上传后的文件名前面加上了很多前缀)
 
