@@ -29,3 +29,4 @@
 
 文件成功上传后，可以在tomcat服务器的对应项目CartCourse下的WEB-INF文件夹下看到上传的文件(上传后的文件名前面加上了很多前缀)
 
+47.106.199.67  xinchen  123456  用于查看上传文件的账号，这个账号只能查看/opt/tomcat/webapps/CartCourse/WEB-INF
